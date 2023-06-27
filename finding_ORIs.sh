@@ -18,33 +18,25 @@ module load  bedtools/2.30.0
 
 
 
-directory=aligned_reads_TB927_bowtie2
-output_dir=MACS2_output_bowtie_trimmed_unique_dups-removed_egs_2019-2020/StrandSpecific_norrowPeaks_alone_p005_927
-#directory=aligned_reads_TB427_bowtie2
-#output_dir=MACS2_output_bowtie_trimmed_unique_dups-removed_egs_2019-2020/StrandSpecific_norrowPeaks_alone_p005_427
-#directory=aligned_reads_SNS-seq2020_bowtie2
-#output_dir=MACS2_output_bowtie_trimmed_unique_dups-removed_egs_2019-2020/StrandSpecific_norrowPeaks_alone_p005_427-2018
-
-#input_list=("9c" "9" "11" "13" "15" "17" "19" "15-17-19" "9-11-13" "9-11-13_subs" "9-11-13_subs2")
-input_list=("9c" "9" "11" "13" "15" "17" "19")
+source config_finding-ORIs.txt
 
 for x in "${input_list[@]}"; do
-	samtools view -b -f 128 -F 16 $directory/$x\_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam > $directory/$x\_F2.bam &&
-	samtools view -b -f 80 $directory/$x\_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam > $directory/$x\_R1.bam &&
-	samtools merge -f $directory/$x\_F2R1_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam $directory/$x\_F2.bam $directory/$x\_R1.bam &&
-	samtools index $directory/$x\_F2R1_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam &&
+	samtools view -b -f 128 -F 16 $directory/$x\_$file_prefix\.bam > $directory/$x\_F2.bam &&
+	samtools view -b -f 80 $directory/$x\_$file_prefix\.bam > $directory/$x\_R1.bam &&
+	samtools merge -f $directory/$x\_F2R1_$file_prefix\.bam $directory/$x\_F2.bam $directory/$x\_R1.bam &&
+	samtools index $directory/$x\_F2R1_$file_prefix\.bam &&
 
-	samtools view -b -f 144 $directory/$x\_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam > $directory/$x\_R2.bam &&
-	samtools view -b -f 64 -F 16 $directory/$x\_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam > $directory/$x\_F1.bam &&
-	samtools merge -f $directory/$x\_F1R2_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam $directory/$x\_R2.bam $directory/$x\_F1.bam &&
-	samtools index $directory/$x\_F1R2_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam \
+	samtools view -b -f 144 $directory/$x\_$file_prefix\.bam > $directory/$x\_R2.bam &&
+	samtools view -b -f 64 -F 16 $directory/$x\_$file_prefix\.bam > $directory/$x\_F1.bam &&
+	samtools merge -f $directory/$x\_F1R2_$file_prefix\.bam $directory/$x\_R2.bam $directory/$x\_F1.bam &&
+	samtools index $directory/$x\_F1R2_$file_prefix\.bam \
 ; done
 
 #PEAK CALLING ALONE:
 
 for x in "${input_list[@]}"; do
-	macs2 callpeak  --bdg  -t $directory/$x\_F2R1_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam   -f BAMPE -n $x\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005   --outdir $output_dir/ -p 5e-2 -s 130 -m 10 30 --gsize 2.5e7 &&
-	macs2 callpeak  --bdg  -t $directory/$x\_F1R2_aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed.bam  -f BAMPE -n $x\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005  --outdir $output_dir/ -p 5e-2 -s 130 -m 10 30 --gsize 2.5e7 \
+	macs2 callpeak  --bdg  -t $directory/$x\_F2R1_$file_prefix\.bam   -f BAMPE -n $x\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005   --outdir $output_dir/ -p 5e-2 -s 130 -m 10 30 --gsize 2.5e7 &&
+	macs2 callpeak  --bdg  -t $directory/$x\_F1R2_$file_prefix\.bam  -f BAMPE -n $x\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005  --outdir $output_dir/ -p 5e-2 -s 130 -m 10 30 --gsize 2.5e7 \
 ; done
 
 

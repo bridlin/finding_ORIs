@@ -1,0 +1,10 @@
+directory=aligned_reads_TB927_bowtie2
+output_dir=MACS2_output_bowtie_trimmed_unique_dups-removed_egs_2019-2020/StrandSpecific_norrowPeaks_alone_p005_927
+file_prefix=aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed
+
+
+input_list=("9c" "9" "11" "13" "15" "17" "19")
+
+
+
+
