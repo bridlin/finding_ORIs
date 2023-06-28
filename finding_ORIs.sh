@@ -20,6 +20,8 @@ module load  bedtools/2.30.0
 
 source config_finding-ORIs.txt
 
+# seperation of the minus and plus strand read pairs:
+
 for x in "${input_list[@]}"; do
 	samtools view -b -f 128 -F 16 $directory/$x\_$file_prefix\.bam > $directory/$x\_F2.bam &&
 	samtools view -b -f 80 $directory/$x\_$file_prefix\.bam > $directory/$x\_R1.bam &&
