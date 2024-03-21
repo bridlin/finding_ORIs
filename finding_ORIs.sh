@@ -18,7 +18,7 @@ module load  bedtools/2.30.0
 
 
 
-source config_finding-ORIs.txt
+source scripts/finding_ORIs/config_finding-ORIs.txt
 
 # seperation of the minus and plus strand read pairs:
 

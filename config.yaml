@@ -1,1 +1,1 @@
-directory: "/aligned_reads_TB927_bowtie2/"
+directory: "${PWD}/aligned_reads_TB927_bowtie2/"
