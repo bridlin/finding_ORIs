@@ -20,7 +20,7 @@ module load picard/2.23.5
 module load multiqc/1.13
 
 
-source config_mapping.txt
+source scripts/finding_ORIs/config_mapping.txt
 
 mkdir $output_dir
 
