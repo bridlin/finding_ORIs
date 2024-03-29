@@ -31,9 +31,7 @@ cutadapt -u -10 -u 10   -U -10 -U 10  \
     -o $fastq_directory/$sample\_R1_5tailtrimmed.fastq.gz  \
     -p $fastq_directory/$sample\_R2_5tailtrimmed.fastq.gz  \
     $fastq_directory/$sample\L001_R1_001.fastq.gz $fastq_directory/$sample\L001_R2_001.fastq.gz &&
-cutadapt  \
-    -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA  \ 
-    -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT  \
+cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT  \
     -o $fastq_directory/$sample\L001_R1_001_5-3trimmed.fastq.gz \
     -p $fastq_directory/$sample\L001_R2_001_5-3trimmed.fastq.gz  \
     $fastq_directory/$sample\_R1_5tailtrimmed.fastq.gz  $fastq_directory/$sample\_R2_5tailtrimmed.fastq.gz \
