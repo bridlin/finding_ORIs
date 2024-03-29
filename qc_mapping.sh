@@ -71,4 +71,4 @@ samtools index $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted.bam &&
 rm -f  $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted_reheadered_dups-removed.bam &&
 rm -f  $fastq_directory/$sample\aln-pe_$genome_prefix\.sam &&
 rm -f  $fastq_directory/$sample\aln-pe_$genome_prefix\.sam.bam &&
-multiqc   $output_dir  --outdir $output_dir
+multiqc   $output_dir  --outdir $output_dir ;done
