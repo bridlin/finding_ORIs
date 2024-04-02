@@ -22,6 +22,8 @@ source config_finding-ORIs.txt
 
 # seperation of the minus and plus strand read pairs:
 
+mkdir $output_dir
+
 for sample in "${input_list[@]}"; do
 	samtools view \
 		-b \
