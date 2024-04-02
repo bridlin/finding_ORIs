@@ -50,23 +50,23 @@ bowtie2 \
     -x $genome \
     -1 $fastq_directory/$sample\L001_R1_001_5-3trimmed_q20.fastq.gz \
     -2 $fastq_directory/$sample\L001_R2_001_5-3trimmed_q20.fastq.gz   \
-    -S $fastq_directory/$sample\aln-pe_$genome_prefix\.sam \
+    -S $output_dir/$sample\aln-pe_$genome_prefix\.sam \
     2> $output_dir/$sample\_bowtie.log &&
-samtools view -S -b $fastq_directory/$sample\aln-pe_$genome_prefix\.sam > $fastq_directory/$sample\aln-pe_$genome_prefix\.sam.bam &&
-samtools sort $fastq_directory/$sample\aln-pe_$genome_prefix\.sam.bam -o $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted.bam &&
-samtools reheader -c 'grep -v ^@PG' $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted.bam  > $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam &&
+samtools view -S -b $output_dir/$sample\aln-pe_$genome_prefix\.sam > $foutput_dir/$sample\aln-pe_$genome_prefix\.sam.bam &&
+samtools sort $output_dir/$sample\aln-pe_$genome_prefix\.sam.bam -o $output_dir/$sample\aln-pe_$genome_prefix\_sorted.bam &&
+samtools reheader -c 'grep -v ^@PG' $output_dir/$sample\aln-pe_$genome_prefix\_sorted.bam  > $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam &&
 picard CollectInsertSizeMetrics \
-    -I $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam \
+    -I $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam \
     -O $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_insert_size_metrics.txt \
     -H $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_insert_size_histogram.pdf \
     -M 0.5  &&
 picard  MarkDuplicates \
     --REMOVE_DUPLICATES true \
-    -I $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam \
-    -O $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted_reheadered_dups-removed.bam \
+    -I $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam \
+    -O $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_dups-removed.bam \
     -M $output_dir/$sample\aln-pe_$genome_prefix\_marked_dup_metrics.txt &&
-samtools index $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted.bam &&
-rm -f  $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted_reheadered_dups-removed.bam &&
-rm -f  $fastq_directory/$sample\aln-pe_$genome_prefix\.sam &&
-rm -f  $fastq_directory/$sample\aln-pe_$genome_prefix\.sam.bam &&
+samtools index $output_dir/$sample\aln-pe_$genome_prefix\_sorted.bam &&
+rm -f  $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_dups-removed.bam &&
+rm -f  $output_dir/$sample\aln-pe_$genome_prefix\.sam &&
+rm -f  $output_dir/$sample\aln-pe_$genome_prefix\.sam.bam &&
 multiqc   $output_dir  --outdir $output_dir ;done
