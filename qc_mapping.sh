@@ -55,10 +55,10 @@ bowtie2 \
 samtools view -S -b $fastq_directory/$sample\aln-pe_$genome_prefix\.sam > $fastq_directory/$sample\aln-pe_$genome_prefix\.sam.bam &&
 samtools sort $fastq_directory/$sample\aln-pe_$genome_prefix\.sam.bam -o $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted.bam &&
 samtools reheader -c 'grep -v ^@PG' $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted.bam  > $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam &&
-picard CollectInsertSizeMetrics \   
-    -I $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam \  
-    -O $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_insert_size_metrics.txt \  
-    -H $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_insert_size_histogram.pdf \  
+picard CollectInsertSizeMetrics \
+    -I $fastq_directory/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam \
+    -O $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_insert_size_metrics.txt \
+    -H $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_insert_size_histogram.pdf \
     -M 0.5  &&
 picard  MarkDuplicates \
     --REMOVE_DUPLICATES true \
