@@ -143,7 +143,7 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 		-a $output_dir/Minus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak  \
 		-b $output_dir/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
 	| awk -v dist="$window"  'BEGIN { OFS="\t" } {if ($12 != -1 && $21 < dist ) {print $0} }'\
-	> $output_dir/closest-iu_Minus-Plus_union$window\_$sample\-alone_nonoverlap$overlap_narrow_p005_peaks.narrowPeak &&
+	> $output_dir/closest-iu_Minus-Plus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak &&
 	bedtools closest \
 		-id \
 		-D ref \
