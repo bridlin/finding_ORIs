@@ -18,7 +18,7 @@ module load  bedtools/2.30.0
 
 
 
-source config_finding-ORIs.txt
+source scripts/finding_ORIs/config_finding-ORIs.txt
 
 # seperation of the minus and plus strand read pairs:
 
@@ -61,7 +61,8 @@ for sample in "${input_list[@]}"; do
 for sample in "${input_list[@]}"; do
 	macs2 callpeak  \
 		--bdg  -t $read_directory/$sample\_F2R1_$file_prefix\.bam   \
-		-f BAMPE -n $sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005   \
+		-f BAMPE \
+		-n $sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005   \
 		--outdir $output_dir/ \
 		-p 5e-2 \
 		-s 130 \
@@ -69,8 +70,9 @@ for sample in "${input_list[@]}"; do
 		--gsize 2.5e7 &&
 	macs2 callpeak  \
 		--bdg  -t $read_directory/$sample\_F1R2_$file_prefix\.bam  \
-		-f BAMPE -n $sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005  \
-		--outdir $output_dir/ \
+		-f BAMPE \
+		-n $sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005  \
+		--outdir $output_dir/ \  
 		-p 5e-2 \
 		-s 130 \
 		-m 10 30 \
@@ -163,5 +165,6 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 	| awk '!a[$1 $2 $3]++' | sort -rk2 \
 	| awk '!seen[$1 $3]++' | sort -k3  \
 	| awk '!seen[$1 $2]++' | sort -k1,1 -k2,2n \
-	> $output_dir/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks.bed   \
+	> $output_dir/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed   \
+	awk ' {print  $1 "\t" $2  "\t" $3  "\t" $4  "\t" $5  "\t""." "\t" $7}' $output_dir/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed  > $output_dir/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks.bed
 ;done ;done ;done
