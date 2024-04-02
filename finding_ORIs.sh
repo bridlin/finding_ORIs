@@ -158,9 +158,7 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 	cat $output_dir/closest-id_Plus-Minus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
 	| awk 'BEGIN { OFS="\t" } {if ($21 < 0 ) {print $1 "\t" $13 "\t" $2 "\t" $4 "\t" "." "\t" "-" "\t" $21}  else if ($21 == 0 && $2 > $12 ) {print $1 "\t" $2 "\t" $13 "\t" $4 "\t" "." "\t" "-" "\t" $21} }' \
 	> $output_dir/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed &&
-	cat \
-	$output_dir/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed  \
-	$output_dir/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed \
+	cat $output_dir/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed  $output_dir/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed \
 	| sort -k1,1 -k2,2n \
 	| awk '!a[$1 $2 $3]++' | sort -rk2 \
 	| awk '!seen[$1 $3]++' | sort -k3  \
