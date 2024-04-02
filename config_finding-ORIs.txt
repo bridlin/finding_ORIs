@@ -1,11 +1,11 @@
-directory=aligned_reads_TB927_bowtie2
+read_directory=aligned_reads_TB927_bowtie2
 output_dir=MACS2_output_bowtie_trimmed_unique_dups-removed_egs_2019-2020/StrandSpecific_norrowPeaks_alone_p005_927
 file_prefix=aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed
 
 
-input_list=("9c" "9" "11" "13" "15" "17" "19")
+input_list=("lm1a_S1_" "lm1b_S2_" "lm3-05b_S5_" "lm3a_S3_" "lm3b_S4_")
 overlap_list=(40 50 60 90) 
 window_list=(500 1000 1500 2000 2500)
 
-
+lm3a_S3_aln-pe_LmF67_sorted.bam
 

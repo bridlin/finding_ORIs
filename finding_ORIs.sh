@@ -27,38 +27,38 @@ for sample in "${input_list[@]}"; do
 		-b \
 		-f 128 \
 		-F 16 \
-		$directory/$sample\_$file_prefix\.bam > $directory/$sample\_F2.bam &&
+		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_F2.bam &&
 	samtools view \
 		-b \
 		-f 80 \
-		$directory/$sample\_$file_prefix\.bam > $directory/$sample\_R1.bam &&
+		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_R1.bam &&
 	samtools merge \
-		-f $directory/$sample\_F2R1_$file_prefix\.bam \
-		$directory/$sample\_F2.bam \
-		$directory/$sample\_R1.bam &&
-	samtools index $directory/$sample\_F2R1_$file_prefix\.bam &&
+		-f $read_directory/$sample\_F2R1_$file_prefix\.bam \
+		$read_directory/$sample\_F2.bam \
+		$read_directory/$sample\_R1.bam &&
+	samtools index $read_directory/$sample\_F2R1_$file_prefix\.bam &&
 
 	samtools view \
 		-b \
 		-f 144 \
-		$directory/$sample\_$file_prefix\.bam > $directory/$sample\_R2.bam &&
+		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_R2.bam &&
 	samtools view \
 		-b \
 		-f 64 \
 		-F 16 \
-		$directory/$sample\_$file_prefix\.bam > $directory/$sample\_F1.bam &&
+		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_F1.bam &&
 	samtools merge \
-		-f $directory/$sample\_F1R2_$file_prefix\.bam \
-		$directory/$sample\_R2.bam \
-		$directory/$sample\_F1.bam &&
-	samtools index $directory/$sample\_F1R2_$file_prefix\.bam \
+		-f $read_directory/$sample\_F1R2_$file_prefix\.bam \
+		$read_directory/$sample\_R2.bam \
+		$read_directory/$sample\_F1.bam &&
+	samtools index $read_directory/$sample\_F1R2_$file_prefix\.bam \
 ; done
 
 #PEAK CALLING ALONE:
 
 for sample in "${input_list[@]}"; do
 	macs2 callpeak  \
-		--bdg  -t $directory/$sample\_F2R1_$file_prefix\.bam   \
+		--bdg  -t $read_directory/$sample\_F2R1_$file_prefix\.bam   \
 		-f BAMPE -n $sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005   \
 		--outdir $output_dir/ \
 		-p 5e-2 \
@@ -66,7 +66,7 @@ for sample in "${input_list[@]}"; do
 		-m 10 30 \
 		--gsize 2.5e7 &&
 	macs2 callpeak  \
-		--bdg  -t $directory/$sample\_F1R2_$file_prefix\.bam  \
+		--bdg  -t $read_directory/$sample\_F1R2_$file_prefix\.bam  \
 		-f BAMPE -n $sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005  \
 		--outdir $output_dir/ \
 		-p 5e-2 \
