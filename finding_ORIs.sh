@@ -36,7 +36,7 @@ for sample in "${input_list[@]}"; do
 		-f $directory/$sample\_F2R1_$file_prefix\.bam \
 		$directory/$sample\_F2.bam \
 		$directory/$sample\_R1.bam &&
-	samtools indesample $directory/$sample\_F2R1_$file_prefix\.bam &&
+	samtools index $directory/$sample\_F2R1_$file_prefix\.bam &&
 
 	samtools view \
 		-b \
@@ -51,7 +51,7 @@ for sample in "${input_list[@]}"; do
 		-f $directory/$sample\_F1R2_$file_prefix\.bam \
 		$directory/$sample\_R2.bam \
 		$directory/$sample\_F1.bam &&
-	samtools indesample $directory/$sample\_F1R2_$file_prefix\.bam \
+	samtools index $directory/$sample\_F1R2_$file_prefix\.bam \
 ; done
 
 #PEAK CALLING ALONE:
