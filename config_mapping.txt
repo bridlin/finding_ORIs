@@ -1,5 +1,5 @@
 output_dir=aligned_reads_SNS2016_LmF2021-67_bowtie2
-input_list=("lm1a_S1_" "lm1b_S2_" "lm3-05b_S5_" "lm3a_S3_" "lm3b_S4_")
+input_list=("tb2a_S8_" "tb4a_S6_" "tb5x_S9_")
 fastq_directory=fastq_SNS_2016
-genome=genome/TriTrypDB-67_LmajorFriedlin2021_Genome/TriTrypDB-67_LmajorFriedlin2021_Genome
-genome_prefix=LmF2021-67
+genome=genome/TriTrypDB-55_TbruceiLister427_2018_Genome/index_bowtie2/TriTrypDB-55_TbruceiLister427_2018_Genome
+genome_prefix=Tb427-2018_55
