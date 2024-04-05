@@ -68,7 +68,7 @@ for sample in "${input_list[@]}"; do
 		-f BAMPE \
 		-n $sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005   \
 		--outdir $output_dir/peak_calling/ \
-		-p 5e-2 
+		-p 5e-2 \
 		-s 130 \
 		-m 10 30 \
 		--gsize 2.5e7 &&
