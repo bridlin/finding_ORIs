@@ -169,8 +169,8 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 # (e) union of the two Ori tables, most of the Ori regions are identical, so the union is done by sorting the regions by start coordinate and removing duplicates and region with tha same sart or end coordinate keeping the smaller one
 	echo $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
 	echo $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
-	cat $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed  \  #$output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed \
-	| sort -k1,1 -k2,2n \
+	cat $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed \  #$output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed \
+	| sort -k1,1 -k2,2n  \
 	| awk '!a[$1 $2 $3]++' \
 	| sort -rk2 \
 	| awk '!seen[$1 $3]++' \
