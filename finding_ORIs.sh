@@ -113,8 +113,6 @@ mkdir $output_dir/oris
 #2) Selecting peaks in a selected window: we used 500 bp max distance. 
 
 for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
-	echo $output_dir/peak_filtering/$sample\-alone_Minus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak && \
-	echo $output_dir/peak_filtering/union$window\_$sample\-alone_Minus-Plus-nonoverlap$overlap\_narrow_p005_peaks.narrowPeak && \
 	bedtools window \
 		-w $window \
 		-a $output_dir/peak_filtering/$sample\-alone_Minus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
@@ -169,6 +167,8 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 	| awk 'BEGIN { OFS="\t" } {if ($21 < 0 ) {print $1 "\t" $13 "\t" $2 "\t" $4 "\t" "." "\t" "-" "\t" $21}  else if ($21 == 0 && $2 > $12 ) {print $1 "\t" $2 "\t" $13 "\t" $4 "\t" "." "\t" "-" "\t" $21} }' \
 	> $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed &&
 # (e) union of the two Ori tables, most of the Ori regions are identical, so the union is done by sorting the regions by start coordinate and removing duplicates and region with tha same sart or end coordinate keeping the smaller one
+	echo $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
+	echo $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
 	cat $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed  $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed \
 	| sort -k1,1 -k2,2n \
 	| awk '!a[$1 $2 $3]++' \
