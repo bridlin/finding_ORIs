@@ -167,15 +167,15 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 	| awk 'BEGIN { OFS="\t" } {if ($21 < 0 ) {print $1 "\t" $13 "\t" $2 "\t" $4 "\t" "." "\t" "-" "\t" $21}  else if ($21 == 0 && $2 > $12 ) {print $1 "\t" $2 "\t" $13 "\t" $4 "\t" "." "\t" "-" "\t" $21} }' \
 	> $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed &&
 # (e) union of the two Ori tables, most of the Ori regions are identical, so the union is done by sorting the regions by start coordinate and removing duplicates and region with tha same sart or end coordinate keeping the smaller one
-	echo $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
-	echo $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
-	cat $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed | sort -k1,1 -k2,2n | uniq | awk '!a[$1 $2 $3]++' \
+	cat $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed 
+	| sort -k1,1 -k2,2n  \
+	| awk '!a[$1 $2 $3]++' \
 	| sort -rk2 \
 	| uniq \
 	| awk '!seen[$1 $3]++' \
 	| sort -k3 \
 	| awk '!seen[$1 $2]++' \
-	| sort -k1,1 -k2,2n \
+	| sort -k1,1 -k2,2n > test.bed \
 	> $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed   \
 	awk ' {print  $1 "\t" $2  "\t" $3  "\t" $4  "\t" $5  "\t""." "\t" $7}' $output_dir/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed  > $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks.bed \
 ;done ;done ;done
