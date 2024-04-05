@@ -113,6 +113,8 @@ mkdir $output_dir/oris
 #2) Selecting peaks in a selected window: we used 500 bp max distance. 
 
 for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
+	echo $output_dir/peak_filtering/$sample\-alone_Minus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak && \
+	echo $output_dir/peak_filtering/union$window\_$sample\-alone_Minus-Plus-nonoverlap$overlap\_narrow_p005_peaks.narrowPeak && \
 	bedtools window \
 		-w $window \
 		-a $output_dir/peak_filtering/$sample\-alone_Minus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
