@@ -170,7 +170,7 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 	echo $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
 	echo $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
 	cat $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed| sort -k1,1 -k2,2n | awk '!a[$1 $2 $3]++' | sort -rk2 | awk '!seen[$1 $3]++' | sort -k3 | awk '!seen[$1 $2]++' | sort -k1,1 -k2,2n> $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed &&  
-	cat $output_dir/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed | \
+	cat $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed | \
 	awk ' {print  $1 "\t" $2  "\t" $3  "\t" $4  "\t" $5  "\t" "." "\t" $7}'  \
 	> $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks.bed \
 ;done ;done ;done
