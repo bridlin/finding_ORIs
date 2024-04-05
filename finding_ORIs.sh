@@ -131,12 +131,6 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 	| uniq \
 	| awk 'BEGIN { OFS="\t" } {if ($4 ~ /_Minus_/) print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "-" "\t" $7 "\t"$8 "\t" $9 "\t" $10 ;else print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "+" "\t" $7 "\t"$8 "\t" $9 "\t" $10}'  \
 	> $output_dir/peak_filtering/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
-	# && \
-	# cat \
-	# $output_dir/peak_filtering/Minus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak  \
-	# $output_dir/peak_filtering/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
-	# | sort -k1,1 -k2,2n \
-	# > $output_dir/peak_filtering/catMinus-Plus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak  \
 ;done ;done ;done
 
 #3)last filtering step : selecting peak pairs in minus upstream plus downstram direction
