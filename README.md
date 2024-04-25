@@ -5,15 +5,15 @@ This repository contains scripts and files used to analyze stranded paired-end S
 The scripts are made to run on a HPC under slurm (Roscoff Bioinformatics platform ABiMS (http://abims.sb-roscoff.fr)).
 
 ## The first script qc_mqpping.sh uses raw paired-end stranded sequencing reads from SNS-seq experiments and performs quality check, quality filtering and read mapping.
-- quality control of the provided fastq files (fastqc)
-- trimming of tail and adapter sequences (cutadapt)
-- quality trimming with q20 threshold (trimmomatic)
-- alignment against provided indexed genome (bowtie2)
-- sorting and conversion fom sam to bam of aligned reads (samtools)
-- check for insert size (picard)
-- removal of duplicated reads (picard)
-- bam file indexing (samtools)
-- generation of Multiqc report (multiqc)
+- quality control of the provided fastq files (fastqc 0.11.9)
+- trimming of tail and adapter sequences (cutadapt 4.0)
+- quality trimming with q20 threshold (trimmomatic 0.39)
+- alignment against provided indexed genome (bowtie2 2.4.1)
+- sorting and conversion fom sam to bam of aligned reads (samtools 1.13)
+- check for insert size (picard 2.2.3.5)
+- removal of duplicated reads (picard 2.2.3.5)
+- bam file indexing (samtools 1.13)
+- generation of Multiqc report (multiqc 1.13)
 
 ### Parameters for this script need to be provided in the config_mapping.txt file:
 
@@ -39,9 +39,9 @@ The scripts are made to run on a HPC under slurm (Roscoff Bioinformatics platfor
 
 ## The second script finding_ORIs.sh will use aligend reads (sorted bam) and outputs bed files of the detected ORIs 
 
-- seperation of mapped reads in minus and plus strand (samtools)
-- strand-seperated peak calling (macs2)
-- peak filtering (bedtools and awk) based on three criterias: 
+- seperation of mapped reads in minus and plus strand (samtools 1.13)
+- strand-seperated peak calling (macs2 2.2.7.1)
+- peak filtering (bedtools 2.2.0.0 and awk) based on three criterias: 
     - distance of minus and plus strand peaks
     - no complete overlap between plus and minus strand peaks
     - right strand orientation (minus followed by plus)
