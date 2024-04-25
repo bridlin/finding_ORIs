@@ -68,7 +68,7 @@ picard  MarkDuplicates \
     -I $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam \
     -O $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_dups-removed.bam \
     -M $output_dir/reports/$sample\aln-pe_$genome_prefix\_marked_dup_metrics.txt &&
-samtools index $output_dir/$sample\aln-pe_$genome_prefix\_sorted.bam &&
+samtools index $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered_dups-removed.bam &&
 rm -f  $output_dir/$sample\aln-pe_$genome_prefix\_sorted_reheadered.bam &&
 rm -f  $output_dir/$sample\aln-pe_$genome_prefix\.sam &&
 rm -f  $output_dir/$sample\aln-pe_$genome_prefix\.sam.bam ;done
