@@ -80,7 +80,7 @@ The first script qc_mapping.sh is for read quality control and mapping if you ha
 
 ## Run
 
-The script are written to be run on an HPC cluster under slurm
+The scripts are written to be run on an HPC cluster under slurm
 
 
 ```bash 
