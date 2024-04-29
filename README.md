@@ -21,7 +21,7 @@ The first script qc_mapping.sh is for read quality control and mapping if you ha
 
 - seperation of mapped reads in minus and plus strand (samtools 1.13)
 - strand-seperated peak calling (macs2 2.2.7.1)
-- peak filtering (bedtools 2.2.0.0 and awk) based on three criterias: 
+- peak filtering (bedtools 2.2.0.0 and awk) based on three criteria: 
     - distance of minus and plus strand peaks
     - no complete overlap between plus and minus strand peaks
     - right strand orientation (minus followed by plus)
