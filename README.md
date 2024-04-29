@@ -89,8 +89,8 @@ The script are written to be run on an HPC cluster under slurm
 
 ```bash 
   sbatch findingORIs/finding_ORIS.sh
+```
 
-    
 
 ## Authors
 
