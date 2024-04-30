@@ -12,8 +12,8 @@ The first script qc_mapping.sh is for read quality control and mapping if you ha
 - quality trimming with q20 threshold (trimmomatic 0.39)
 - alignment against provided indexed genome (bowtie2 2.4.1)
 - sorting and conversion fom sam to bam of aligned reads (samtools 1.13)
-- check for insert size (picard 2.2.3.5)
-- removal of duplicated reads (picard 2.2.3.5)
+- check for insert size (picard 2.23.5)
+- removal of duplicated reads (picard 2.23.5)
 - bam file indexing (samtools 1.13)
 - generation of Multiqc report (multiqc 1.13)
 
