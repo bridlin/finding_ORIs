@@ -28,12 +28,12 @@ mkdir $output_dir/reports
 
 
 for sample in "${input_list[@]}"; do
-fastqc $fastq_directory/$sample\L001_R1_001.fastq.gz --outdir $output_dir &&
-fastqc $fastq_directory/$sample\L001_R2_001.fastq.gz --outdir $output_dir &&
+fastqc $fastq_directory/$sample$readname_postfix_R1 --outdir $output_dir &&
+fastqc $fastq_directory/$sample$readname_postfix_R2 --outdir $output_dir &&
 cutadapt -u -10 -u 10   -U -10 -U 10  \
     -o $fastq_directory/$sample\R1_5tailtrimmed.fastq.gz  \
     -p $fastq_directory/$sample\R2_5tailtrimmed.fastq.gz  \
-    $fastq_directory/$sample\L001_R1_001.fastq.gz $fastq_directory/$sample\L001_R2_001.fastq.gz &&
+    $fastq_directory/$sample$readname_postfix_R1 $fastq_directory/$sample$readname_postfix_R2 &&
 cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT  \
     -o $fastq_directory/$sample\R1_5-3trimmed.fastq.gz \
     -p $fastq_directory/$sample\R2_5-3trimmed.fastq.gz  \

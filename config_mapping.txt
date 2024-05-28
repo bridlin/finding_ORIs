@@ -13,5 +13,5 @@ genome = genome/TriTrypDB-55_TbruceiLister427_2018_Genome/index_bowtie2/TriTrypD
 genome_prefix = Tb427-2018-55  
 # genome prefix for filenames of mapped reads  
 
-readname_postfix_R1 = L001_R1_001
-readname_postfix_R2 = L001_R2_001
+readname_postfix_R1 = L001_R1_001.fastq.gz
+readname_postfix_R2 = L001_R2_001.fastq.gz
