@@ -35,24 +35,24 @@ cutadapt -u -10 -u 10   -U -10 -U 10  \
     -p $fastq_directory/$sample\R2_5tailtrimmed.fastq.gz  \
     $fastq_directory/$sample\L001_R1_001.fastq.gz $fastq_directory/$sample\L001_R2_001.fastq.gz &&
 cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT  \
-    -o $fastq_directory/$sample\L001_R1_001_5-3trimmed.fastq.gz \
-    -p $fastq_directory/$sample\L001_R2_001_5-3trimmed.fastq.gz  \
+    -o $fastq_directory/$sample\R1_5-3trimmed.fastq.gz \
+    -p $fastq_directory/$sample\R2_5-3trimmed.fastq.gz  \
     $fastq_directory/$sample\R1_5tailtrimmed.fastq.gz  $fastq_directory/$sample\R2_5tailtrimmed.fastq.gz \
     --minimum-length 30 > $output_dir//reports/$sample\_cutadapt_report.txt &&
 trimmomatic PE \
     -threads 4 \
     -trimlog $output_dir/$sample\trim \
-    $fastq_directory/$sample\L001_R1_001_5-3trimmed.fastq.gz $fastq_directory/$sample\L001_R2_001_5-3trimmed.fastq.gz \
-    $fastq_directory/$sample\L001_R1_001_5-3trimmed_q20.fastq.gz   $fastq_directory/$sample\L001_R1_001_5-3trimmed_q20_un.fastq.gz \
-    $fastq_directory/$sample\L001_R2_001_5-3trimmed_q20.fastq.gz   $fastq_directory/$sample\L001_R2_001_5-3trimmed_q20_un.fastq.gz \
+    $fastq_directory/$sample\R1_5-3trimmed.fastq.gz $fastq_directory/$sample\R2_5-3trimmed.fastq.gz \
+    $fastq_directory/$sample\R1_5-3trimmed_q20.fastq.gz   $fastq_directory/$sample\R1_5-3trimmed_q20_un.fastq.gz \
+    $fastq_directory/$sample\R2_5-3trimmed_q20.fastq.gz   $fastq_directory/$sample\R2_5-3trimmed_q20_un.fastq.gz \
     SLIDINGWINDOW:4:20 MINLEN:40 &&
-fastqc $fastq_directory/$sample\L001_R1_001_5-3trimmed_q20.fastq.gz --outdir $output_dir/fastqc &&
-fastqc $fastq_directory/$sample\L001_R2_001_5-3trimmed_q20.fastq.gz --outdir $output_dir/fastqc &&
+fastqc $fastq_directory/$sample\R1_5-3trimmed_q20.fastq.gz --outdir $output_dir/fastqc &&
+fastqc $fastq_directory/$sample\R2_5-3trimmed_q20.fastq.gz --outdir $output_dir/fastqc &&
 bowtie2 \
     -k1 \
     -x $genome \
-    -1 $fastq_directory/$sample\L001_R1_001_5-3trimmed_q20.fastq.gz \
-    -2 $fastq_directory/$sample\L001_R2_001_5-3trimmed_q20.fastq.gz   \
+    -1 $fastq_directory/$sample\R1_5-3trimmed_q20.fastq.gz \
+    -2 $fastq_directory/$sample\R2_5-3trimmed_q20.fastq.gz   \
     -S $output_dir/$sample\aln-pe_$genome_prefix\.sam \
     2> $output_dir/reports/$sample\_bowtie.log &&
 samtools view -S -b $output_dir/$sample\aln-pe_$genome_prefix\.sam > $output_dir/$sample\aln-pe_$genome_prefix\.sam.bam &&
