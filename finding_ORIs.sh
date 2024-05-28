@@ -62,7 +62,7 @@ for sample in "${input_list[@]}"; do
 #PEAK CALLING without control (alone): done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
 
 for sample in "${input_list[@]}"; do
-	if $with_control == "TRUE"; then
+	if $with_control == true; then
 		macs2 callpeak  \
 			--bdg  \
 			-t $read_directory/$sample\_F2R1_$file_prefix\.bam   \
