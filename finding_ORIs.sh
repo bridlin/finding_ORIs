@@ -136,29 +136,29 @@ mkdir $output_dir/oris
 # 		--gsize 2.5e7 \
 # ;done
 
-# #PEAK FILTERING: 
-# #1) Sorting out overlapping peaks: we used 50% of maximal overlap for at least one peak for the selection of non-overlapping peaks. 
+#PEAK FILTERING: 
+#1) Sorting out overlapping peaks: we used 50% of maximal overlap for at least one peak for the selection of non-overlapping peaks. 
 
-# for overlap in "${overlap_list[@]}" ; do for sample in "${input_list[@]}" ; do
-# 	bedtools intersect \
-# 		-wa  \
-# 		-e  \
-# 		-v \
-# 		-f 0.$overlap  \
-# 		-F 0.$overlap  \
-# 		-a $output_dir/peak_calling/$sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak \
-# 		-b $output_dir/peak_calling/$sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak \
-# 	> $output_dir/peak_filtering/$sample\-alone_Minus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak &&
-# 	bedtools intersect \
-# 		-wa  \
-# 		-e  \
-# 		-v \
-# 		-f 0.$overlap  \
-# 		-F 0.$overlap  \
-# 		-a $output_dir/peak_calling/$sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak \
-# 		-b $output_dir/peak_calling/$sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak \
-# 		> $output_dir/peak_filtering/$sample\-alone_Plus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
-# ;done ;done
+for overlap in "${overlap_list[@]}" ; do for sample in "${input_list[@]}" ; do
+	bedtools intersect \
+		-wa  \
+		-e  \
+		-v \
+		-f 0.$overlap  \
+		-F 0.$overlap  \
+		-a $output_dir/peak_calling/$sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak \
+		-b $output_dir/peak_calling/$sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak \
+	> $output_dir/peak_filtering/$sample\-alone_Minus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak &&
+	bedtools intersect \
+		-wa  \
+		-e  \
+		-v \
+		-f 0.$overlap  \
+		-F 0.$overlap  \
+		-a $output_dir/peak_calling/$sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak \
+		-b $output_dir/peak_calling/$sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak \
+		> $output_dir/peak_filtering/$sample\-alone_Plus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
+;done ;done
 
 
 #2) Selecting peaks in a selected window: we used 500 bp max distance. 
