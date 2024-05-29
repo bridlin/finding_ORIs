@@ -88,7 +88,7 @@ for sample in "${input_list[@]}"; do
 			--gsize 2.5e7 \
 		
 	else
-		macs2 callpeak  \
+	macs2 callpeak  \
 			--bdg  \
 			-t $read_directory/$sample\_F2R1_$file_prefix\.bam   \
 			-f BAMPE \
@@ -108,6 +108,9 @@ for sample in "${input_list[@]}"; do
 			-s 130 \
 			-m 10 30 \
 			--gsize 2.5e7 \
+	
+		
+	fi
 ;done
 
 
