@@ -111,30 +111,30 @@ mkdir $output_dir/oris
 # 	fi
 # ;done
 
-# for sample in "${input_list[@]}"; do
-# 	macs2 callpeak  \
-# 		--bdg  \
-# 		-t $read_directory/$sample\_F2R1_$file_prefix\.bam   \
-# 		-c $read_directory/$sample\_control_F2R1_$file_prefix\.bam  \
-# 		-f BAMPE \
-# 		-n $sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005   \
-# 		--outdir $output_dir/peak_calling/ \
-# 		-p 5e-2 \
-# 		-s 130 \
-# 		-m 10 30 \
-# 		--gsize 2.5e7 &&
-# 	macs2 callpeak  \
-# 		--bdg  \
-# 		-t $read_directory/$sample\_F1R2_$file_prefix\.bam  \
-# 		-c $read_directory/$sample\_control_F1R2_$file_prefix\.bam  \
-# 		-f BAMPE \
-# 		-n $sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005  \
-# 		--outdir $output_dir/peak_calling/ \
-# 		-p 5e-2 \
-# 		-s 130 \
-# 		-m 10 30 \
-# 		--gsize 2.5e7 \
-# ;done
+for sample in "${input_list[@]}"; do
+	macs2 callpeak  \
+		--bdg  \
+		-t $read_directory/$sample\_F2R1_$file_prefix\.bam   \
+		-c $read_directory/$sample\_control_F2R1_$file_prefix\.bam  \
+		-f BAMPE \
+		-n $sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow_p005   \
+		--outdir $output_dir/peak_calling/ \
+		-p 5e-2 \
+		-s 130 \
+		-m 10 30 \
+		--gsize 2.5e7 &&
+	macs2 callpeak  \
+		--bdg  \
+		-t $read_directory/$sample\_F1R2_$file_prefix\.bam  \
+		-c $read_directory/$sample\_control_F1R2_$file_prefix\.bam  \
+		-f BAMPE \
+		-n $sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow_p005  \
+		--outdir $output_dir/peak_calling/ \
+		-p 5e-2 \
+		-s 130 \
+		-m 10 30 \
+		--gsize 2.5e7 \
+;done
 
 #PEAK FILTERING: 
 #1) Sorting out overlapping peaks: we used 50% of maximal overlap for at least one peak for the selection of non-overlapping peaks. 
