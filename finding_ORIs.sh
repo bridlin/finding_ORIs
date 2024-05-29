@@ -161,67 +161,67 @@ for overlap in "${overlap_list[@]}" ; do for sample in "${input_list[@]}" ; do
 ;done ;done
 
 
-#2) Selecting peaks in a selected window: we used 500 bp max distance. 
+# #2) Selecting peaks in a selected window: we used 500 bp max distance. 
 
-for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
-	bedtools window \
-		-w $window \
-		-a $output_dir/peak_filtering/$sample\-alone_Minus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
-		-b $output_dir/peak_filtering/$sample\-alone_Plus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
-		> $output_dir/peak_filtering/union$window\_$sample\-alone_Minus-Plus-nonoverlap$overlap\_narrow_p005_peaks.narrowPeak  &&
-	# seperating the bedtools window output in Minus and Plus peaks tables
-	cat $output_dir/peak_filtering/union$window\_$sample\-alone_Minus-Plus-nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
-	| cut -f 1,2,3,4,5,6,7,8,9,10 \
-	| sort -k1,1 -k2,2n  \
-	| uniq \
-	| awk 'BEGIN { OFS="\t" } {if ($4 ~ /_Minus_/) print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "-" "\t" $7 "\t"$8 "\t" $9 "\t" $10 ;else print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "+" "\t" $7 "\t"$8 "\t" $9 "\t" $10}' \
-	> $output_dir/peak_filtering/Minus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak &&
-	cat $output_dir/peak_filtering/union$window\_$sample\-alone_Minus-Plus-nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
-	| cut -f 11,12,13,14,15,16,17,18,19,20 \
-	| sort -k1,1 -k2,2n  \
-	| uniq \
-	| awk 'BEGIN { OFS="\t" } {if ($4 ~ /_Minus_/) print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "-" "\t" $7 "\t"$8 "\t" $9 "\t" $10 ;else print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "+" "\t" $7 "\t"$8 "\t" $9 "\t" $10}'  \
-	> $output_dir/peak_filtering/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
-;done ;done ;done
+# for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
+# 	bedtools window \
+# 		-w $window \
+# 		-a $output_dir/peak_filtering/$sample\-alone_Minus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
+# 		-b $output_dir/peak_filtering/$sample\-alone_Plus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
+# 		> $output_dir/peak_filtering/union$window\_$sample\-alone_Minus-Plus-nonoverlap$overlap\_narrow_p005_peaks.narrowPeak  &&
+# 	# seperating the bedtools window output in Minus and Plus peaks tables
+# 	cat $output_dir/peak_filtering/union$window\_$sample\-alone_Minus-Plus-nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
+# 	| cut -f 1,2,3,4,5,6,7,8,9,10 \
+# 	| sort -k1,1 -k2,2n  \
+# 	| uniq \
+# 	| awk 'BEGIN { OFS="\t" } {if ($4 ~ /_Minus_/) print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "-" "\t" $7 "\t"$8 "\t" $9 "\t" $10 ;else print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "+" "\t" $7 "\t"$8 "\t" $9 "\t" $10}' \
+# 	> $output_dir/peak_filtering/Minus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak &&
+# 	cat $output_dir/peak_filtering/union$window\_$sample\-alone_Minus-Plus-nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
+# 	| cut -f 11,12,13,14,15,16,17,18,19,20 \
+# 	| sort -k1,1 -k2,2n  \
+# 	| uniq \
+# 	| awk 'BEGIN { OFS="\t" } {if ($4 ~ /_Minus_/) print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "-" "\t" $7 "\t"$8 "\t" $9 "\t" $10 ;else print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" "+" "\t" $7 "\t"$8 "\t" $9 "\t" $10}'  \
+# 	> $output_dir/peak_filtering/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
+# ;done ;done ;done
 
-#3)last filtering step : selecting peak pairs in minus upstream plus downstram direction
-#ORI SELECTION  defining origina as the region between filtered peak pairs
+# #3)last filtering step : selecting peak pairs in minus upstream plus downstram direction
+# #ORI SELECTION  defining origina as the region between filtered peak pairs
 
-#  (a) closest iu: closest peak downstream  to the minus strand peaks, awk line to exclude all distances bigger than the window size
+# #  (a) closest iu: closest peak downstream  to the minus strand peaks, awk line to exclude all distances bigger than the window size
 
-for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
-	bedtools closest \
-		-iu \
-		-D ref \
-		-t all \
-		-a $output_dir/peak_filtering/Minus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak  \
-		-b $output_dir/peak_filtering/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak | \
-		awk -v dist="$window"  'BEGIN { OFS="\t" } {if ($12 != -1 && $21 < dist ) {print $0} }'\
-	> $output_dir/peak_filtering/closest-iu_Minus-Plus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak &&
-# (b) closest id: closest peak upstream to the plus strand peaks, awk line to exclude all distances bigger than the window size	
-	bedtools closest \
-		-id \
-		-D ref \
-		-t all \
-		-a $output_dir/peak_filtering/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
-		-b $output_dir/peak_filtering/Minus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak |  \
-		awk -v dist="$window"  'BEGIN { OFS="\t" } {if ($12 != -1 && $21 > -dist ) {print $0} }'  \
-	> $output_dir/peak_filtering/closest-id_Plus-Minus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak &&
-# (c) selection of the origins as the region between a minus downstream and a following plus peaks from the closest output table:
-# to be considered: the closest iu option is not ignoring upstream peaks that are overlapping. Those are filtered out by distance ($21) smaller equal 0 and start coordinate of a ($2) bigger than start coordinate of b ($12).
-	cat $output_dir/peak_filtering/closest-iu_Minus-Plus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak |\
-	awk 'BEGIN { OFS="\t" } {if ($21 > 0 ) {print $1 "\t" $3 "\t" $12 "\t" $4 "\t" "." "\t" $6 "\t" $21}   else if ($21 == 0 && $2 < $12 ) {print $1 "\t" $12 "\t" $3 "\t" $4 "\t" "." "\t" $6 "\t" $21} }' \
-	> $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed &&
-# (d) selection of the Origins as the region between a plus upstream and a following Minus peaks from the closest output table:
-# to be considered: the closest id option is not ignoring downstream peaks that are overlapping. Those are filtered out by distance ($21) equal  0 and start coordinate of a ($2) smaller than start coordinate of b ($12).	
-	cat $output_dir/peak_filtering/closest-id_Plus-Minus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak |\
-	awk 'BEGIN { OFS="\t" } {if ($21 < 0 ) {print $1 "\t" $13 "\t" $2 "\t" $4 "\t" "." "\t" "-" "\t" $21}  else if ($21 == 0 && $2 > $12 ) {print $1 "\t" $2 "\t" $13 "\t" $4 "\t" "." "\t" "-" "\t" $21} }' \	
- 	> $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed &&
-# (e) union of the two Ori tables, most of the Ori regions are identical, so the union is done by sorting the regions by start coordinate and removing duplicates and region with tha same sart or end coordinate keeping the smaller one
-	echo $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
-	echo $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
-	cat $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed| sort -k1,1 -k2,2n | awk '!a[$1 $2 $3]++' | sort -rk2 | awk '!seen[$1 $3]++' | sort -k3 | awk '!seen[$1 $2]++' | sort -k1,1 -k2,2n> $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed &&  
-	cat $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed | \
-	awk ' {print  $1 "\t" $2  "\t" $3  "\t" $4  "\t" $5  "\t" "." "\t" $7}'  \
-	> $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks.bed \
-;done ;done ;done
+# for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
+# 	bedtools closest \
+# 		-iu \
+# 		-D ref \
+# 		-t all \
+# 		-a $output_dir/peak_filtering/Minus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak  \
+# 		-b $output_dir/peak_filtering/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak | \
+# 		awk -v dist="$window"  'BEGIN { OFS="\t" } {if ($12 != -1 && $21 < dist ) {print $0} }'\
+# 	> $output_dir/peak_filtering/closest-iu_Minus-Plus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak &&
+# # (b) closest id: closest peak upstream to the plus strand peaks, awk line to exclude all distances bigger than the window size	
+# 	bedtools closest \
+# 		-id \
+# 		-D ref \
+# 		-t all \
+# 		-a $output_dir/peak_filtering/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
+# 		-b $output_dir/peak_filtering/Minus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak |  \
+# 		awk -v dist="$window"  'BEGIN { OFS="\t" } {if ($12 != -1 && $21 > -dist ) {print $0} }'  \
+# 	> $output_dir/peak_filtering/closest-id_Plus-Minus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak &&
+# # (c) selection of the origins as the region between a minus downstream and a following plus peaks from the closest output table:
+# # to be considered: the closest iu option is not ignoring upstream peaks that are overlapping. Those are filtered out by distance ($21) smaller equal 0 and start coordinate of a ($2) bigger than start coordinate of b ($12).
+# 	cat $output_dir/peak_filtering/closest-iu_Minus-Plus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak |\
+# 	awk 'BEGIN { OFS="\t" } {if ($21 > 0 ) {print $1 "\t" $3 "\t" $12 "\t" $4 "\t" "." "\t" $6 "\t" $21}   else if ($21 == 0 && $2 < $12 ) {print $1 "\t" $12 "\t" $3 "\t" $4 "\t" "." "\t" $6 "\t" $21} }' \
+# 	> $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed &&
+# # (d) selection of the Origins as the region between a plus upstream and a following Minus peaks from the closest output table:
+# # to be considered: the closest id option is not ignoring downstream peaks that are overlapping. Those are filtered out by distance ($21) equal  0 and start coordinate of a ($2) smaller than start coordinate of b ($12).	
+# 	cat $output_dir/peak_filtering/closest-id_Plus-Minus_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak |\
+# 	awk 'BEGIN { OFS="\t" } {if ($21 < 0 ) {print $1 "\t" $13 "\t" $2 "\t" $4 "\t" "." "\t" "-" "\t" $21}  else if ($21 == 0 && $2 > $12 ) {print $1 "\t" $2 "\t" $13 "\t" $4 "\t" "." "\t" "-" "\t" $21} }' \	
+#  	> $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed &&
+# # (e) union of the two Ori tables, most of the Ori regions are identical, so the union is done by sorting the regions by start coordinate and removing duplicates and region with tha same sart or end coordinate keeping the smaller one
+# 	echo $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
+# 	echo $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed && \
+# 	cat $output_dir/peak_filtering/Plus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed $output_dir/peak_filtering/Minus_oris_union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.bed| sort -k1,1 -k2,2n | awk '!a[$1 $2 $3]++' | sort -rk2 | awk '!seen[$1 $3]++' | sort -k3 | awk '!seen[$1 $2]++' | sort -k1,1 -k2,2n> $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed &&  
+# 	cat $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks_withStrand.bed | \
+# 	awk ' {print  $1 "\t" $2  "\t" $3  "\t" $4  "\t" $5  "\t" "." "\t" $7}'  \
+# 	> $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks.bed \
+# ;done ;done ;done
