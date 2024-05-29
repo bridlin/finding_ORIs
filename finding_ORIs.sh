@@ -108,8 +108,8 @@ for sample in "${input_list[@]}"; do
 			-s 130 \
 			-m 10 30 \
 			--gsize 2.5e7 \
-	fi
-; done
+   	fi
+ ;done
 
 
 #PEAK FILTERING: 
