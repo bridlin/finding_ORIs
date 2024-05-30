@@ -114,7 +114,9 @@ for overlap in "${overlap_list[@]}" ; do for sample in "${input_list[@]}" ; do
 	> $output_dir/peak_filtering/$sample\-alone_Plus_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
 ;done ;done
 
-printf "peak selection\n"
+printf "overlapping peak filtered\n"
+
+
 #2) Selecting peaks in a selected window: we used 500 bp max distance. 
 
 for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
@@ -138,7 +140,8 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 	> $output_dir/peak_filtering/Plus-union$window\_$sample\-alone_nonoverlap$overlap\_narrow_p005_peaks.narrowPeak \
 ;done ;done ;done
 
-printf "ori selection\n"
+printf "peak pairs selected\n"
+
 #3)last filtering step : selecting peak pairs in minus upstream plus downstram direction
 #ORI SELECTION  defining origina as the region between filtered peak pairs
 
@@ -180,3 +183,5 @@ for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for 
 	awk ' {print  $1 "\t" $2  "\t" $3  "\t" $4  "\t" $5  "\t" "." "\t" $7}'  \
 	> $output_dir/oris/ORI_$sample\-alone_union$window\_nonoverlap$overlap\_narrow_p005_peaks.bed \
 ;done ;done ;done
+
+printf "ori selection completed\n"
