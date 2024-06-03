@@ -27,39 +27,39 @@ mkdir $output_dir/peak_calling
 mkdir $output_dir/peak_filtering
 mkdir $output_dir/oris
 
-#for sample in "${input_list[@]}"; do
-#	samtools view \
-#		-b \
-#		-f 128 \
-#		-F 16 \
-#		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_F2.bam &&
-#	samtools view \
-#		-b \
-#		-f 80 \
-#		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_R1.bam &&
-#	samtools merge \
-#		-f $read_directory/$sample\_F2R1_$file_prefix\.bam \
-#		$read_directory/$sample\_F2.bam \
-#		$read_directory/$sample\_R1.bam &&
-#	samtools index $read_directory/$sample\_F2R1_$file_prefix\.bam &&
-#
-#	samtools view \
-#		-b \
-#		-f 144 \
-#		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_R2.bam &&
-#	samtools view \
-#		-b \
-#		-f 64 \
-#		-F 16 \
-#		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_F1.bam &&
-#	samtools merge \
-#		-f $read_directory/$sample\_F1R2_$file_prefix\.bam \
-#		$read_directory/$sample\_R2.bam \
-#		$read_directory/$sample\_F1.bam &&
-#	samtools index $read_directory/$sample\_F1R2_$file_prefix\.bam \
-#; done
+for sample in "${input_list[@]}"; do
+	samtools view \
+		-b \
+		-f 128 \
+		-F 16 \
+		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_F2.bam &&
+	samtools view \
+		-b \
+		-f 80 \
+		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_R1.bam &&
+	samtools merge \
+		-f $read_directory/$sample\_F2R1_$file_prefix\.bam \
+		$read_directory/$sample\_F2.bam \
+		$read_directory/$sample\_R1.bam &&
+	samtools index $read_directory/$sample\_F2R1_$file_prefix\.bam &&
 
-#PEAK CALLING without control (alone): done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
+	samtools view \
+		-b \
+		-f 144 \
+		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_R2.bam &&
+	samtools view \
+		-b \
+		-f 64 \
+		-F 16 \
+		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_F1.bam &&
+	samtools merge \
+		-f $read_directory/$sample\_F1R2_$file_prefix\.bam \
+		$read_directory/$sample\_R2.bam \
+		$read_directory/$sample\_F1.bam &&
+	samtools index $read_directory/$sample\_F1R2_$file_prefix\.bam \
+; done
+
+PEAK CALLING without control (alone): done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
 
 
 
