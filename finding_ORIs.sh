@@ -63,34 +63,34 @@ mkdir $output_dir/oris
 
 
 
-# for sample in "${input_list[@]}"; do
-# 	macs2 callpeak  \
-# 		--bdg  \
-# 		-t $read_directory/$sample\_F2R1_$file_prefix\.bam   \
-# 		-c $read_directory/$sample\_control_F2R1_$file_prefix\.bam  \
-# 		-f BAMPE \
-# 		-n $sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow   \
-# 		--outdir $output_dir/peak_calling/ \
-# 		-s 130 \
-# 		-p 4e-1 \
-# 		-m 10 30 \
-# 		--slocal 10000\
-# 		--llocal 50000\
-# 		--gsize 2.5e7 &&
-# 	macs2 callpeak  \
-# 		--bdg  \
-# 		-t $read_directory/$sample\_F1R2_$file_prefix\.bam  \
-# 		-c $read_directory/$sample\_control_F1R2_$file_prefix\.bam  \
-# 		-f BAMPE \
-# 		-n $sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow  \
-# 		--outdir $output_dir/peak_calling/ \
-# 		-s 130 \
-# 		-p 4e-1 \
-# 		-m 10 30 \
-# 		--slocal 10000\
-# 		--llocal 50000\
-# 		--gsize 2.5e7 \
-# ;done
+for sample in "${input_list[@]}"; do
+	macs2 callpeak  \
+		--bdg  \
+		-t $read_directory/$sample\_F2R1_$file_prefix\.bam   \
+		-c $read_directory/$sample\_control_F2R1_$file_prefix\.bam  \
+		-f BAMPE \
+		-n $sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow   \
+		--outdir $output_dir/peak_calling/ \
+		-s 130 \
+		-p 5e-5 \
+		-m 10 30 \
+		--slocal 20000\
+		--llocal 100000\
+		--gsize 2.5e7 &&
+	macs2 callpeak  \
+		--bdg  \
+		-t $read_directory/$sample\_F1R2_$file_prefix\.bam  \
+		-c $read_directory/$sample\_control_F1R2_$file_prefix\.bam  \
+		-f BAMPE \
+		-n $sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow  \
+		--outdir $output_dir/peak_calling/ \
+		-s 130 \
+		-p 5e-5 \
+		-m 10 30 \
+		--slocal 20000\
+		--llocal 100000\
+		--gsize 2.5e7 \
+;done
 
 #--nolambda \
 #--nolambda \
