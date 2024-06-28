@@ -75,7 +75,7 @@ for sample in "${input_list[@]}"; do
 		-p 5e-5 \
 		-m 10 30 \
 		--slocal 10000\
-		--llocal 100000\
+		--llocal 50000\
 		--gsize 2.5e7 &&
 	macs2 callpeak  \
 		--bdg  \
@@ -88,7 +88,7 @@ for sample in "${input_list[@]}"; do
 		-p 5e-5 \
 		-m 10 30 \
 		--slocal 10000\
-		--llocal 100000\
+		--llocal 50000\
 		--gsize 2.5e7 \
 ;done
 
