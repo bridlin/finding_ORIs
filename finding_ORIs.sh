@@ -72,7 +72,7 @@ for sample in "${input_list[@]}"; do
 		-n $sample\-alone_Minus_bowtie2_trimmed_uniq_dupsre_narrow   \
 		--outdir $output_dir/peak_calling/ \
 		-s 130 \
-		-p 5e-5 \
+		-p 5e-2 \
 		-m 10 30 \
 		--slocal 10000\
 		--llocal 50000\
@@ -85,7 +85,7 @@ for sample in "${input_list[@]}"; do
 		-n $sample\-alone_Plus_bowtie2_trimmed_uniq_dupsre_narrow  \
 		--outdir $output_dir/peak_calling/ \
 		-s 130 \
-		-p 5e-5 \
+		-p 5e-2 \
 		-m 10 30 \
 		--slocal 10000\
 		--llocal 50000\
