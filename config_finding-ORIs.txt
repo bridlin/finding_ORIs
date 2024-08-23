@@ -7,7 +7,7 @@ output_dir=StrandSpecific_norrowPeaks_RNASE_p05_Tb427-2018_p005_subsamplePCF
 file_prefix=aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed                 
 # prefix of mapped reads ($sample$prefix.bam)
 
-input_list=("PCF_subs0" "PCF_subs1" "PCF_subs2" "PCF_subs3" "PCF_subs4" "PCF_subs5" "PCF_subs6" "PCF_subs7" "PCF_subs8" "PCF_subs9" "PCF_subs10" "PCF_subs11" "PCF_subs12" "PCF_subs13" "PCF_subs14" "PCF_subs15")      
+input_list=("PCF_subs0_control" "PCF_subs1_control" "PCF_subs2_control" "PCF_subs3_control" "PCF_subs4_control" "PCF_subs5_control" "PCF_subs6_control" "PCF_subs7_control" "PCF_subs8_control" "PCF_subs9_control" "PCF_subs10_control" "PCF_subs11_control" "PCF_subs12_control" "PCF_subs13_control" "PCF_subs14_control" "PCF_subs15_control")      
 # sample name as found in bam files 
 
 overlap_list=(50)                                                  
