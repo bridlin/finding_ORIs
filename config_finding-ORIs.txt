@@ -7,7 +7,7 @@ output_dir=StrandSpecific_norrowPeaks_RNASE_p05_Tb427-2018_p005_mergedBSF
 file_prefix=aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed                 
 # prefix of mapped reads ($sample$prefix.bam)
 
-input_list=("16-18-20_control")      
+input_list=("15-17-19")      
 # sample name as found in bam files 
 
 overlap_list=(50)                                                  
