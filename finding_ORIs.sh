@@ -59,7 +59,7 @@ for sample in "${input_list[@]}"; do
 	samtools index $read_directory/$sample\_F1R2_$file_prefix\.bam \
 ; done
 
-###PEAK CALLING without control (alone): done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
+###PEAK CALLING: done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
 
 
 
