@@ -16,4 +16,3 @@ overlap_list=(50)
 window_list=(500)                                       
 # window size for peak pair selection
 
-with_control=true
