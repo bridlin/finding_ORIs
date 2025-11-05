@@ -20,6 +20,15 @@ module load  bedtools/2.30.0
 
 source scripts/finding_ORIs/config_finding-ORIs.txt
 
+printf "samples are $input_list\n"
+printf "output_file is $output_dir\n"
+printf "read directory is $read_directory\n"
+printf "max overlap used is $overlap %\n"
+printf "max window used is $window bp\n"
+printf "bam file prefix is $bam_file_prefix \n"
+printf "minus-peak file is $minus_peak_file_ending \n"
+printf "plus-peak file is $plus_peak_file_ending \n"
+
 ### seperation of the minus and plus strand read pairs: The read pairs are seperated by the flag information in the bam file. F2R1 for minus read pairs and F1R2 for plus read pairs. The bam files are indexed for further processing.
 
 mkdir $output_dir
@@ -27,68 +36,68 @@ mkdir $output_dir/peak_calling
 mkdir $output_dir/peak_filtering
 mkdir $output_dir/oris
 
-for sample in "${input_list[@]}"; do
-	samtools view \
-		-b \
-		-f 128 \
-		-F 16 \
-		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_F2.bam &&
-	samtools view \
-		-b \
-		-f 80 \
-		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_R1.bam &&
-	samtools merge \
-		-f $read_directory/$sample\_F2R1_$bam_file_prefix\.bam \
-		$read_directory/$sample\_F2.bam \
-		$read_directory/$sample\_R1.bam &&
-	samtools index $read_directory/$sample\_F2R1_$bam_file_prefix\.bam &&
+# for sample in "${input_list[@]}"; do
+# 	samtools view \
+# 		-b \
+# 		-f 128 \
+# 		-F 16 \
+# 		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_F2.bam &&
+# 	samtools view \
+# 		-b \
+# 		-f 80 \
+# 		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_R1.bam &&
+# 	samtools merge \
+# 		-f $read_directory/$sample\_F2R1_$bam_file_prefix\.bam \
+# 		$read_directory/$sample\_F2.bam \
+# 		$read_directory/$sample\_R1.bam &&
+# 	samtools index $read_directory/$sample\_F2R1_$bam_file_prefix\.bam &&
 
-	samtools view \
-		-b \
-		-f 144 \
-		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_R2.bam &&
-	samtools view \
-		-b \
-		-f 64 \
-		-F 16 \
-		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_F1.bam &&
-	samtools merge \
-		-f $read_directory/$sample\_F1R2_$bam_file_prefix\.bam \
-		$read_directory/$sample\_R2.bam \
-		$read_directory/$sample\_F1.bam &&
-	samtools index $read_directory/$sample\_F1R2_$bam_file_prefix\.bam \
-; done
+# 	samtools view \
+# 		-b \
+# 		-f 144 \
+# 		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_R2.bam &&
+# 	samtools view \
+# 		-b \
+# 		-f 64 \
+# 		-F 16 \
+# 		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_F1.bam &&
+# 	samtools merge \
+# 		-f $read_directory/$sample\_F1R2_$bam_file_prefix\.bam \
+# 		$read_directory/$sample\_R2.bam \
+# 		$read_directory/$sample\_F1.bam &&
+# 	samtools index $read_directory/$sample\_F1R2_$bam_file_prefix\.bam \
+# ; done
 
-###PEAK CALLING: done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
+# ###PEAK CALLING: done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
 
 
 
-for sample in "${input_list[@]}"; do
-	macs2 callpeak  \
-		--bdg  \
-		-t $read_directory/$sample\_F2R1_$bam_file_prefix\.bam   \
-		-c $read_directory/$sample\_control_F2R1_$bam_file_prefix\.bam  \
-		-f BAMPE \
-		-n $sample\-RNASE_Minus_bowtie2_trimmed_uniq_dupsre_narrow   \
-		--outdir $output_dir/peak_calling/ \
-		-s 130 \
-		-p 5e-2 \
-		-m 10 30 \
-		--gsize 2.5e7 &&
-	macs2 callpeak  \
-		--bdg  \
-		-t $read_directory/$sample\_F1R2_$bam_file_prefix\.bam  \
-		-c $read_directory/$sample\_control_F1R2_$bam_file_prefix\.bam  \
-		-f BAMPE \
-		-n $sample\-RNASE_Plus_bowtie2_trimmed_uniq_dupsre_narrow  \
-		--outdir $output_dir/peak_calling/ \
-		-s 130 \
-		-p 5e-2 \
-		-m 10 30 \
-		--gsize 2.5e7 \
-;done
+# for sample in "${input_list[@]}"; do
+# 	macs2 callpeak  \
+# 		--bdg  \
+# 		-t $read_directory/$sample\_F2R1_$bam_file_prefix\.bam   \
+# 		-c $read_directory/$sample\_control_F2R1_$bam_file_prefix\.bam  \
+# 		-f BAMPE \
+# 		-n $sample\-RNASE_Minus_bowtie2_trimmed_uniq_dupsre_narrow   \
+# 		--outdir $output_dir/peak_calling/ \
+# 		-s 130 \
+# 		-p 5e-2 \
+# 		-m 10 30 \
+# 		--gsize 2.5e7 &&
+# 	macs2 callpeak  \
+# 		--bdg  \
+# 		-t $read_directory/$sample\_F1R2_$bam_file_prefix\.bam  \
+# 		-c $read_directory/$sample\_control_F1R2_$bam_file_prefix\.bam  \
+# 		-f BAMPE \
+# 		-n $sample\-RNASE_Plus_bowtie2_trimmed_uniq_dupsre_narrow  \
+# 		--outdir $output_dir/peak_calling/ \
+# 		-s 130 \
+# 		-p 5e-2 \
+# 		-m 10 30 \
+# 		--gsize 2.5e7 \
+# ;done
 
-printf "peak calling completed\n"
+# printf "peak calling completed\n"
 
 ###PEAK FILTERING: 
 ###1) Sorting out overlapping peaks: we used 50% of maximal overlap for at least one peak for the selection of non-overlapping peaks. 
