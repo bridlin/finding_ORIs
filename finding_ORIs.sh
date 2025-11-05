@@ -32,31 +32,31 @@ for sample in "${input_list[@]}"; do
 		-b \
 		-f 128 \
 		-F 16 \
-		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_F2.bam &&
+		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_F2.bam &&
 	samtools view \
 		-b \
 		-f 80 \
-		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_R1.bam &&
+		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_R1.bam &&
 	samtools merge \
-		-f $read_directory/$sample\_F2R1_$file_prefix\.bam \
+		-f $read_directory/$sample\_F2R1_$bam_file_prefix\.bam \
 		$read_directory/$sample\_F2.bam \
 		$read_directory/$sample\_R1.bam &&
-	samtools index $read_directory/$sample\_F2R1_$file_prefix\.bam &&
+	samtools index $read_directory/$sample\_F2R1_$bam_file_prefix\.bam &&
 
 	samtools view \
 		-b \
 		-f 144 \
-		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_R2.bam &&
+		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_R2.bam &&
 	samtools view \
 		-b \
 		-f 64 \
 		-F 16 \
-		$read_directory/$sample\_$file_prefix\.bam > $read_directory/$sample\_F1.bam &&
+		$read_directory/$sample\_$bam_file_prefix\.bam > $read_directory/$sample\_F1.bam &&
 	samtools merge \
-		-f $read_directory/$sample\_F1R2_$file_prefix\.bam \
+		-f $read_directory/$sample\_F1R2_$bam_file_prefix\.bam \
 		$read_directory/$sample\_R2.bam \
 		$read_directory/$sample\_F1.bam &&
-	samtools index $read_directory/$sample\_F1R2_$file_prefix\.bam \
+	samtools index $read_directory/$sample\_F1R2_$bam_file_prefix\.bam \
 ; done
 
 ###PEAK CALLING: done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
@@ -66,8 +66,8 @@ for sample in "${input_list[@]}"; do
 for sample in "${input_list[@]}"; do
 	macs2 callpeak  \
 		--bdg  \
-		-t $read_directory/$sample\_F2R1_$file_prefix\.bam   \
-		-c $read_directory/$sample\_control_F2R1_$file_prefix\.bam  \
+		-t $read_directory/$sample\_F2R1_$bam_file_prefix\.bam   \
+		-c $read_directory/$sample\_control_F2R1_$bam_file_prefix\.bam  \
 		-f BAMPE \
 		-n $sample\-RNASE_Minus_bowtie2_trimmed_uniq_dupsre_narrow   \
 		--outdir $output_dir/peak_calling/ \
@@ -77,8 +77,8 @@ for sample in "${input_list[@]}"; do
 		--gsize 2.5e7 &&
 	macs2 callpeak  \
 		--bdg  \
-		-t $read_directory/$sample\_F1R2_$file_prefix\.bam  \
-		-c $read_directory/$sample\_control_F1R2_$file_prefix\.bam  \
+		-t $read_directory/$sample\_F1R2_$bam_file_prefix\.bam  \
+		-c $read_directory/$sample\_control_F1R2_$bam_file_prefix\.bam  \
 		-f BAMPE \
 		-n $sample\-RNASE_Plus_bowtie2_trimmed_uniq_dupsre_narrow  \
 		--outdir $output_dir/peak_calling/ \
@@ -102,8 +102,8 @@ for overlap in "${overlap_list[@]}" ; do for sample in "${input_list[@]}" ; do
 		-v \
 		-f 0.$overlap  \
 		-F 0.$overlap  \
-		-a $output_dir/peak_calling/$sample\-RNASE_Minus_bowtie2_trimmed_uniq_dupsre_narrow_peaks.narrowPeak \
-		-b $output_dir/peak_calling/$sample\-RNASE_Plus_bowtie2_trimmed_uniq_dupsre_narrow_peaks.narrowPeak \
+		-a $output_dir/peak_calling/$sample$minus_peak_file_ending \
+		-b $output_dir/peak_calling/$sample$plus_peak_file_ending \
 	> $output_dir/peak_filtering/$sample\-RNASE_Minus_nonoverlap$overlap\_narrow_peaks.narrowPeak &&
 	bedtools intersect \
 		-wa  \
@@ -111,8 +111,8 @@ for overlap in "${overlap_list[@]}" ; do for sample in "${input_list[@]}" ; do
 		-v \
 		-f 0.$overlap  \
 		-F 0.$overlap  \
-		-a $output_dir/peak_calling/$sample\-RNASE_Plus_bowtie2_trimmed_uniq_dupsre_narrow_peaks.narrowPeak \
-		-b $output_dir/peak_calling/$sample\-RNASE_Minus_bowtie2_trimmed_uniq_dupsre_narrow_peaks.narrowPeak \
+		-a $output_dir/peak_calling/$sample$plus_peak_file_ending \
+		-b $output_dir/peak_calling/$sample$minus_peak_file_ending \
 	> $output_dir/peak_filtering/$sample\-RNASE_Plus_nonoverlap$overlap\_narrow_peaks.narrowPeak \
 ;done ;done
 
