@@ -27,6 +27,7 @@ mkdir ${alined_reads_dir}/fastqc
 mkdir ${alined_reads_dir}/reports
 
 printf "read qc and alignment\n"
+echo "Number of samples: ${#input_list[@]}"
 printf "samples are ${input_list[@]}\n"
 printf "read directory is ${fastq_directory}\n"
 printf "aligned read directory is ${alined_reads_dir}\n"
@@ -34,8 +35,10 @@ printf "readname postfix is  ${readname_postfix_R1} and ${readname_postfix_R2} \
 printf "genome used is ${genome} with prefix ${genome_prefix}\n"
 
 for sample in "${input_list[@]}"; do
+echo "fastqc on raw reads for ${sample}" &&
 fastqc ${fastq_directory}/${sample}${readname_postfix_R1} --outdir ${alined_reads_dir}/fastqc &&
 fastqc ${fastq_directory}/${sample}${readname_postfix_R2} --outdir ${alined_reads_dir}/fastqc &&
+echo "cutadapt for ${sample}" &&
 cutadapt -u -10 -u 10   -U -10 -U 10  \
     -o ${fastq_directory}/${sample}R1_5tailtrimmed.fastq.gz  \
     -p ${fastq_directory}/${sample}R2_5tailtrimmed.fastq.gz  \
@@ -45,6 +48,7 @@ cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAG
     -p ${fastq_directory}/${sample}R2_5-3trimmed.fastq.gz  \
     ${fastq_directory}/${sample}R1_5tailtrimmed.fastq.gz  ${fastq_directory}/${sample}R2_5tailtrimmed.fastq.gz \
     --minimum-length 30 > ${alined_reads_dir}//reports/${sample}\_cutadapt_report.txt &&
+echo "trimmomatic for ${sample}" &&
 trimmomatic PE \
     -threads 4 \
     -trimlog ${alined_reads_dir}/${sample}trim \
@@ -52,8 +56,10 @@ trimmomatic PE \
     ${fastq_directory}/${sample}R1_5-3trimmed_q20.fastq.gz   ${fastq_directory}/${sample}R1_5-3trimmed_q20_un.fastq.gz \
     ${fastq_directory}/${sample}R2_5-3trimmed_q20.fastq.gz   ${fastq_directory}/${sample}R2_5-3trimmed_q20_un.fastq.gz \
     SLIDINGWINDOW:4:20 MINLEN:40 &&
+echo "fastqc on trimmed reads for ${sample}" &&
 fastqc ${fastq_directory}/${sample}R1_5-3trimmed_q20.fastq.gz --outdir ${alined_reads_dir}/fastqc &&
 fastqc ${fastq_directory}/${sample}R2_5-3trimmed_q20.fastq.gz --outdir ${alined_reads_dir}/fastqc && 
+echo "read alignment on ${genome_prefix} for ${sample}" &&
 bowtie2 \
     -k1 \
     -x ${genome} \
@@ -64,6 +70,7 @@ bowtie2 \
 samtools view -S -b ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}.sam > ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}.sam.bam &&
 samtools sort ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}.sam.bam -o ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted.bam &&
 samtools reheader -c 'grep -v ^@PG' ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted.bam  > ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered.bam &&
+echo "checking insert6 size for ${sample}" &&
 picard CollectInsertSizeMetrics \
     -I ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered.bam \
     -O ${alined_reads_dir}/reports/${sample}aln-pe_${genome_prefix}_sorted_reheadered_insert_size_metrics.txt \
