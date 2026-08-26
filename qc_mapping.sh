@@ -27,13 +27,13 @@ mkdir ${alined_reads_dir}/fastqc
 mkdir ${alined_reads_dir}/reports
 
 printf "read qc and alignment\n"
-printf "samples are $input_list\n"
+printf "samples are ${input_list[@]}\n"
 printf "read directory is ${fastq_directory}\n"
-printf "aligned read directory is $alined_reads_dir\n"
+printf "aligned read directory is ${alined_reads_dir}\n"
 printf "readname postfix is  ${readname_postfix_R1} and ${readname_postfix_R2} \n"
 printf "genome used is ${genome} with prefix ${genome_prefix}\n"
 
-for {sample} in "${input_list[@]}"; do
+for sample in "${input_list[@]}"; do
 fastqc ${fastq_directory}/${sample}${readname_postfix_R1} --outdir ${alined_reads_dir}/fastqc &&
 fastqc ${fastq_directory}/${sample}${readname_postfix_R2} --outdir ${alined_reads_dir}/fastqc &&
 cutadapt -u -10 -u 10   -U -10 -U 10  \
