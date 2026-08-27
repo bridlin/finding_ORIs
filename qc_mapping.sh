@@ -91,7 +91,7 @@ echo -e  "generating bw files from aligned reads with CPU normalisation for ${sa
 bamCoverage \
     -b ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bam \
     -o ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bw \
-    --normalizeUsing CPM \ 
+    --normalizeUsing CPM 
 done
 
 multiqc   \
