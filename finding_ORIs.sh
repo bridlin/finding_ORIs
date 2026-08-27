@@ -37,6 +37,7 @@ mkdir ${output_dir}/peak_filtering
 mkdir ${output_dir}/oris
 
 for sample in "${input_list[@]}"; do
+	echo -e "seperating reads for ${sample}\n" &&
 	samtools view \
 		-b \
 		-f 128 \
@@ -66,7 +67,7 @@ for sample in "${input_list[@]}"; do
 		${alined_reads_dir}/${sample}_R2.bam \
 		${alined_reads_dir}/${sample}_F1.bam &&
 	samtools index ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam &&
-	
+	echo -e "making bigwig files for seperated reads for ${sample}\n" &&
 	bamCoverage \
 		-b ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam \
 		-o ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bw \
@@ -84,6 +85,7 @@ for sample in "${input_list[@]}"; do
 
 
 for sample in "${input_list[@]}"; do
+	echo -e "peak calling for ${sample}\n" &&
 	macs2 callpeak  \
 		--bdg  \
 		-t ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam   \
@@ -98,7 +100,7 @@ for sample in "${input_list[@]}"; do
 	macs2 callpeak  \
 		--bdg  \
 		-t ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam  \
-		-c ${alined_reads_dir}/${sample}_control_F1R2_${bam_file_prefix}.bam  \
+		-c ${alined_reads_dir}/${control_macs}  \
 		-f BAMPE \
 		-n ${sample}-RNASE_Plus_bowtie2_trimmed_uniq_dupsre_narrow  \
 		--outdir ${output_dir}/peak_calling/ \
@@ -113,9 +115,10 @@ printf "peak calling completed\n"
 ###PEAK FILTERING: 
 ###1) Sorting out overlapping peaks: we used 50% of maximal overlap for at least one peak for the selection of non-overlapping peaks. 
 
-printf "peak filtering\n"
+echo -e "peak filtering\n"
 
 for overlap in "${overlap_list[@]}" ; do for sample in "${input_list[@]}" ; do
+	echo -e "filtering overlapping peaks for ${sample} with overlap ${overlap}\n" &&
 	bedtools intersect \
 		-wa  \
 		-e  \
@@ -142,6 +145,7 @@ printf "overlapping peak filtered\n"
 ###2) Selecting peaks in a selected window: we used 500 bp max distance. 
 
 for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
+	echo -e "selecting peaks in window ${window} for ${sample} with overlap ${overlap}\n" &&
 	bedtools window \
 		-w ${window} \
 		-a ${output_dir}/peak_filtering/${sample}-RNASE_Minus_nonoverlap${overlap}_narrow_peaks.narrowPeak \
@@ -169,7 +173,7 @@ printf "peak pairs selected\n"
 
 ###  (a) closest iu: closest peak downstream  to the minus strand peaks, awk line to exclude all distances bigger than the window size
 
-for window in "${window_list[@]}"; do for {sample}in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
+for window in "${window_list[@]}"; do for sample in "${input_list[@]}" ; do for overlap in "${overlap_list[@]}" ; do
 	bedtools closest \
 		-iu \
 		-D ref \
@@ -178,6 +182,7 @@ for window in "${window_list[@]}"; do for {sample}in "${input_list[@]}" ; do for
 		-b ${output_dir}/peak_filtering/Plus-union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.narrowPeak | \
 		awk -v dist="${window}"  'BEGIN { OFS="\t" } {if ($12 != -1 && $21 < dist ) {print $0} }'\
 	> ${output_dir}/peak_filtering/closest-iu_Minus-Plus_union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.narrowPeak &&
+
 ### (b) closest id: closest peak upstream to the plus strand peaks, awk line to exclude all distances bigger than the window size	
 	bedtools closest \
 		-id \
@@ -187,16 +192,19 @@ for window in "${window_list[@]}"; do for {sample}in "${input_list[@]}" ; do for
 		-b ${output_dir}/peak_filtering/Minus-union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.narrowPeak |  \
 		awk -v dist="${window}"  'BEGIN { OFS="\t" } {if ($12 != -1 && $21 > -dist ) {print $0} }'  \
 	> ${output_dir}/peak_filtering/closest-id_Plus-Minus_union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.narrowPeak &&
+
 ### (c) selection of the origins as the region between a minus downstream and a following plus peaks from the closest output table:
 ### to be considered: the closest iu option is not ignoring upstream peaks that are overlapping. Those are filtered out by distance ($21) smaller equal 0 and start coordinate of a ($2) bigger than start coordinate of b ($12).
 	cat ${output_dir}/peak_filtering/closest-iu_Minus-Plus_union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.narrowPeak |\
 	awk 'BEGIN { OFS="\t" } {if ($21 > 0 ) {print $1 "\t" $3 "\t" $12 "\t" $4 "\t" $5+$15/2 "\t" $6 "\t" $21}   else if ($21 == 0 && $2 < $12 ) {print $1 "\t" $12 "\t" $3 "\t" $4 "\t" $5+$15/2 "\t" $6 "\t" $21} }' \
 	> ${output_dir}/peak_filtering/Minus_oris_union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.bed &&
+
 ### (d) selection of the Origins as the region between a plus upstream and a following Minus peaks from the closest output table:
 ### to be considered: the closest id option is not ignoring downstream peaks that are overlapping. Those are filtered out by distance ($21) equal  0 and start coordinate of a ($2) smaller than start coordinate of b ($12).	
 	cat ${output_dir}/peak_filtering/closest-id_Plus-Minus_union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.narrowPeak |\
 	awk 'BEGIN { OFS="\t" } {if ($21 < 0 ) {print $1 "\t" $13 "\t" $2 "\t" $4 "\t" $5+$15/2 "\t" "-" "\t" $21}   else if ($21 == 0 && $2 > $12 ) {print $1 "\t" $2 "\t" $13 "\t" $4 "\t" $5+$15/2 "\t" "-" "\t" $21} }' \
 	> ${output_dir}/peak_filtering/Plus_oris_union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.bed &&
+
 ### (e) union of the two Ori tables, most of the Ori regions are identical, so the union is done by sorting the regions by start coordinate and removing duplicates and region with tha same sart or end coordinate keeping the smaller one
 	echo ${output_dir}/peak_filtering/Plus_oris_union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.bed && \
 	echo ${output_dir}/peak_filtering/Minus_oris_union${window}_${sample}-RNASE_nonoverlap${overlap}_narrow_peaks.bed && \
