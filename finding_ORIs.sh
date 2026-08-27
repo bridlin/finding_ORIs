@@ -18,7 +18,7 @@ module load deeptools/3.5.6
 
 
 
-source scripts/finding_ORIs/config_finding-ORIs.txt
+source scripts/finding_ORIs/config.txt
 
 printf "read qc and alignment\n"
 echo "Number of samples: ${#input_list[@]}"
@@ -76,7 +76,7 @@ for sample in "${input_list[@]}"; do
 	bamCoverage \
 		-b ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam \
 		-o ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bw \
-		--normalizeUsing CPM 
+		--normalizeUsing CPM \
 
 ; done
 
