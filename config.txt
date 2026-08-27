@@ -29,14 +29,11 @@ output_dir=ORI_SNS-IP_norrowPeaks_Tb427-2018_p005
 bam_file_prefix=aln-pe_TB_trimmed_unique_sorted_reheadered_dups-removed                 
 # prefix of mapped reads ($sample$prefix.bam)
 
-minus_peak_file_ending=_crick_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak                
-# file ending of minus peaks  ($sample$plus_peak_file_ending)
-
-plus_peak_file_ending=_watson_bowtie2_trimmed_uniq_dupsre_narrow_p005_peaks.narrowPeak                
-# file ending of plus peaks  ($sample$minus_peak_file_ending)
-
-# input_list=("shuffeled_9_vs_10-b" "shuffeled_11_vs_12-b" "shuffeled_13_vs_14-b" "shuffeled_15_vs_16-b" "shuffeled_17_vs_18-b" "shuffeled_19_vs_20-b")      
+# input_list_macs=("SNS-IP_10-12_" "SNS-IP_13-14_Start" "SNS-IP_15-16_" "SNS-IP_17-18_" "SNS-IP_19-20_" "SNS-IP_21-22_" "SNS-IP_4-6_" "SNS-IP_7-9_" "SNS-IP_control-non-spec-binding_")      
 # # sample name as found in bam files 
+
+control_macs=SNS-IP_Input_gDNA_
+
 
 overlap_list=(50)                                                  
 # peak overlap to be excluded
