@@ -77,8 +77,7 @@ for sample in "${input_list[@]}"; do
 		-b ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam \
 		-o ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bw \
 		--normalizeUsing CPM \
-
-; done
+;done
 
 ###PEAK CALLING: done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
 
