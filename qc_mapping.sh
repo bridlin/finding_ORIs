@@ -35,62 +35,62 @@ printf "readname postfix is  ${readname_postfix_R1} and ${readname_postfix_R2} \
 printf "genome used is ${genome} with prefix ${genome_prefix}\n"
 
 for sample in "${input_list[@]}"; do
-echo -e "fastqc on raw reads for ${sample}\n" &&
-# fastqc ${fastq_directory}/${sample}${readname_postfix_R1} --outdir ${alined_reads_dir}/fastqc &&
-# fastqc ${fastq_directory}/${sample}${readname_postfix_R2} --outdir ${alined_reads_dir}/fastqc &&
-# echo -e "cutadapt for ${sample}\n" &&
-# cutadapt -u -10 -u 10   -U -10 -U 10  \
-#     -o ${fastq_directory}/${sample}R1_5tailtrimmed.fastq.gz  \
-#     -p ${fastq_directory}/${sample}R2_5tailtrimmed.fastq.gz  \
-#     ${fastq_directory}/${sample}${readname_postfix_R1} ${fastq_directory}/${sample}${readname_postfix_R2} &&
-# cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT  \
-#     -o ${fastq_directory}/${sample}R1_5-3trimmed.fastq.gz \
-#     -p ${fastq_directory}/${sample}R2_5-3trimmed.fastq.gz  \
-#     ${fastq_directory}/${sample}R1_5tailtrimmed.fastq.gz  ${fastq_directory}/${sample}R2_5tailtrimmed.fastq.gz \
-#     --minimum-length 30 > ${alined_reads_dir}//reports/${sample}\_cutadapt_report.txt &&
-# echo -e "trimmomatic for ${sample}" &&
-# trimmomatic PE \
-#     -threads 4 \
-#     -trimlog ${alined_reads_dir}/${sample}trim \
-#     ${fastq_directory}/${sample}R1_5-3trimmed.fastq.gz ${fastq_directory}/${sample}R2_5-3trimmed.fastq.gz \
-#     ${fastq_directory}/${sample}R1_5-3trimmed_q20.fastq.gz   ${fastq_directory}/${sample}R1_5-3trimmed_q20_un.fastq.gz \
-#     ${fastq_directory}/${sample}R2_5-3trimmed_q20.fastq.gz   ${fastq_directory}/${sample}R2_5-3trimmed_q20_un.fastq.gz \
-#     SLIDINGWINDOW:4:20 MINLEN:40 &&
-# echo -e "fastqc on trimmed reads for ${sample}\n" &&
-# fastqc ${fastq_directory}/${sample}R1_5-3trimmed_q20.fastq.gz --outdir ${alined_reads_dir}/fastqc &&
-# fastqc ${fastq_directory}/${sample}R2_5-3trimmed_q20.fastq.gz --outdir ${alined_reads_dir}/fastqc && 
-# echo -e "read alignment on ${genome_prefix} for ${sample}\n" &&
-# bowtie2 \
-#     -k1 \
-#     -x ${genome} \
-#     -1 ${fastq_directory}/${sample}R1_5-3trimmed_q20.fastq.gz \
-#     -2 ${fastq_directory}/${sample}R2_5-3trimmed_q20.fastq.gz   \
-#     -S ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}.sam \
-#     2> ${alined_reads_dir}/reports/${sample}_bowtie.log &&
-# samtools view -S -b ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}.sam > ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}.sam.bam &&
-# samtools sort ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}.sam.bam -o ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted.bam &&
-# samtools reheader -c 'grep -v ^@PG' ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted.bam  > ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered.bam &&
-# echo -e  "checking insert  size for ${sample}\n" &&
-# picard CollectInsertSizeMetrics \
-#     -I ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered.bam \
-#     -O ${alined_reads_dir}/reports/${sample}aln-pe_${genome_prefix}_sorted_reheadered_insert_size_metrics.txt \
-#     -H ${alined_reads_dir}/reports/${sample}aln-pe_${genome_prefix}_sorted_reheadered_insert_size_histogram.pdf \
-#     -M 0.5  &&
-# picard  MarkDuplicates \
-#     --REMOVE_DUPLICATES true \
-#     -I ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered.bam \
-#     -O ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bam \
-#     -M ${alined_reads_dir}/reports/${sample}aln-pe_${genome_prefix}_marked_dup_metrics.txt &&
-# samtools index ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bam &&
-# rm -f  ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered.bam &&
-# rm -f  ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}.sam &&
-# rm -f  ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}.sam.bam &&
+echo -e "fastqc on raw reads for ${sample}_\n" &&
+fastqc ${fastq_directory}/${sample}_${readname_postfix_R1} --outdir ${alined_reads_dir}/fastqc &&
+fastqc ${fastq_directory}/${sample}_${readname_postfix_R2} --outdir ${alined_reads_dir}/fastqc &&
+echo -e "cutadapt for ${sample}_\n" &&
+cutadapt -u -10 -u 10   -U -10 -U 10  \
+    -o ${fastq_directory}/${sample}_R1_5tailtrimmed.fastq.gz  \
+    -p ${fastq_directory}/${sample}_R2_5tailtrimmed.fastq.gz  \
+    ${fastq_directory}/${sample}_${readname_postfix_R1} ${fastq_directory}/${sample}_${readname_postfix_R2} &&
+cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT  \
+    -o ${fastq_directory}/${sample}_R1_5-3trimmed.fastq.gz \
+    -p ${fastq_directory}/${sample}_R2_5-3trimmed.fastq.gz  \
+    ${fastq_directory}/${sample}_R1_5tailtrimmed.fastq.gz  ${fastq_directory}/${sample}_R2_5tailtrimmed.fastq.gz \
+    --minimum-length 30 > ${alined_reads_dir}//reports/${sample}_\_cutadapt_report.txt &&
+echo -e "trimmomatic for ${sample}_" &&
+trimmomatic PE \
+    -threads 4 \
+    -trimlog ${alined_reads_dir}/${sample}_trim \
+    ${fastq_directory}/${sample}_R1_5-3trimmed.fastq.gz ${fastq_directory}/${sample}_R2_5-3trimmed.fastq.gz \
+    ${fastq_directory}/${sample}_R1_5-3trimmed_q20.fastq.gz   ${fastq_directory}/${sample}_R1_5-3trimmed_q20_un.fastq.gz \
+    ${fastq_directory}/${sample}_R2_5-3trimmed_q20.fastq.gz   ${fastq_directory}/${sample}_R2_5-3trimmed_q20_un.fastq.gz \
+    SLIDINGWINDOW:4:20 MINLEN:40 &&
+echo -e "fastqc on trimmed reads for ${sample}_\n" &&
+fastqc ${fastq_directory}/${sample}_R1_5-3trimmed_q20.fastq.gz --outdir ${alined_reads_dir}/fastqc &&
+fastqc ${fastq_directory}/${sample}_R2_5-3trimmed_q20.fastq.gz --outdir ${alined_reads_dir}/fastqc && 
+echo -e "read alignment on ${genome_prefix} for ${sample}_\n" &&
+bowtie2 \
+    -k1 \
+    -x ${genome} \
+    -1 ${fastq_directory}/${sample}_R1_5-3trimmed_q20.fastq.gz \
+    -2 ${fastq_directory}/${sample}_R2_5-3trimmed_q20.fastq.gz   \
+    -S ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}.sam \
+    2> ${alined_reads_dir}/reports/${sample}__bowtie.log &&
+samtools view -S -b ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}.sam > ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}.sam.bam &&
+samtools sort ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}.sam.bam -o ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted.bam &&
+samtools reheader -c 'grep -v ^@PG' ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted.bam  > ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted_reheadered.bam &&
+echo -e  "checking insert  size for ${sample}_\n" &&
+picard CollectInsertSizeMetrics \
+    -I ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted_reheadered.bam \
+    -O ${alined_reads_dir}/reports/${sample}_aln-pe_${genome_prefix}_sorted_reheadered_insert_size_metrics.txt \
+    -H ${alined_reads_dir}/reports/${sample}_aln-pe_${genome_prefix}_sorted_reheadered_insert_size_histogram.pdf \
+    -M 0.5  &&
+picard  MarkDuplicates \
+    --REMOVE_DUPLICATES true \
+    -I ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted_reheadered.bam \
+    -O ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bam \
+    -M ${alined_reads_dir}/reports/${sample}_aln-pe_${genome_prefix}_marked_dup_metrics.txt &&
+samtools index ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bam &&
+rm -f  ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted_reheadered.bam &&
+rm -f  ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}.sam &&
+rm -f  ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}.sam.bam &&
 
 # bigwig files from aligned reads scalled to counts per million mapped reads
-echo -e  "generating bw files from aligned reads with CPU normalisation for ${sample}\n" &&
+echo -e  "generating bw files from aligned reads with CPU normalisation for ${sample}_\n" &&
 bamCoverage \
-    -b ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bam \
-    -o ${alined_reads_dir}/${sample}aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bw \
+    -b ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bam \
+    -o ${alined_reads_dir}/${sample}_aln-pe_${genome_prefix}_sorted_reheadered_dups-removed.bw \
     --normalizeUsing CPM 
 done
 

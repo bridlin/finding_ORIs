@@ -42,7 +42,7 @@ for sample in "${input_list[@]}"; do
 		-b \
 		-f 128 \
 		-F 16 \
-		${alined_reads_dir}/${sample}${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_F2.bam &&
+		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_F2.bam &&
 	samtools view \
 		-b \
 		-f 80 \
@@ -56,7 +56,7 @@ for sample in "${input_list[@]}"; do
 	samtools view \
 		-b \
 		-f 144 \
-		${alined_reads_dir}/${sample}${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_R2.bam &&
+		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_R2.bam &&
 	samtools view \
 		-b \
 		-f 64 \
@@ -88,7 +88,7 @@ for sample in "${input_list_macs[@]}"; do
 	macs2 callpeak  \
 		--bdg  \
 		-t ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam   \
-		-c ${alined_reads_dir}/${control_macs}  \
+		-c ${alined_reads_dir}/${control_macs}_F2R1_${bam_file_prefix}.bam  \
 		-f BAMPE \
 		-n ${sample}_Minus_bowtie2_trimmed_uniq_dupsre_narrow   \
 		--outdir ${output_dir}/peak_calling/ \
