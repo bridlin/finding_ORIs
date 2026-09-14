@@ -61,7 +61,7 @@ for sample in "${input_list[@]}"; do
 		-b \
 		-f 64 \
 		-F 16 \
-		${alined_reads_dir}/${sample}${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_F1.bam &&
+		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_F1.bam &&
 	samtools merge \
 		-f ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam \
 		${alined_reads_dir}/${sample}_R2.bam \
