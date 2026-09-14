@@ -46,7 +46,7 @@ for sample in "${input_list[@]}"; do
 	samtools view \
 		-b \
 		-f 80 \
-		${alined_reads_dir}/${sample}${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_R1.bam &&
+		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_R1.bam &&
 	samtools merge \
 		-f ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam \
 		${alined_reads_dir}/${sample}_F2.bam \
