@@ -36,48 +36,48 @@ mkdir ${output_dir}/peak_calling
 mkdir ${output_dir}/peak_filtering
 mkdir ${output_dir}/oris
 
-for sample in "${input_list[@]}"; do
-	echo -e "seperating reads for ${sample}\n" &&
-	samtools view \
-		-b \
-		-f 128 \
-		-F 16 \
-		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_F2.bam &&
-	samtools view \
-		-b \
-		-f 80 \
-		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_R1.bam &&
-	samtools merge \
-		-f ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam \
-		${alined_reads_dir}/${sample}_F2.bam \
-		${alined_reads_dir}/${sample}_R1.bam &&
-	samtools index ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam &&
+# for sample in "${input_list[@]}"; do
+# 	echo -e "seperating reads for ${sample}\n" &&
+# 	samtools view \
+# 		-b \
+# 		-f 128 \
+# 		-F 16 \
+# 		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_F2.bam &&
+# 	samtools view \
+# 		-b \
+# 		-f 80 \
+# 		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_R1.bam &&
+# 	samtools merge \
+# 		-f ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam \
+# 		${alined_reads_dir}/${sample}_F2.bam \
+# 		${alined_reads_dir}/${sample}_R1.bam &&
+# 	samtools index ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam &&
 
-	samtools view \
-		-b \
-		-f 144 \
-		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_R2.bam &&
-	samtools view \
-		-b \
-		-f 64 \
-		-F 16 \
-		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_F1.bam &&
-	samtools merge \
-		-f ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam \
-		${alined_reads_dir}/${sample}_R2.bam \
-		${alined_reads_dir}/${sample}_F1.bam &&
-	samtools index ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam &&
-	echo -e "making bigwig files for seperated reads for ${sample}\n" &&
-	bamCoverage \
-		-b ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam \
-		-o ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bw \
-		--normalizeUsing CPM 
+# 	samtools view \
+# 		-b \
+# 		-f 144 \
+# 		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_R2.bam &&
+# 	samtools view \
+# 		-b \
+# 		-f 64 \
+# 		-F 16 \
+# 		${alined_reads_dir}/${sample}_${bam_file_prefix}.bam > ${alined_reads_dir}/${sample}_F1.bam &&
+# 	samtools merge \
+# 		-f ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam \
+# 		${alined_reads_dir}/${sample}_R2.bam \
+# 		${alined_reads_dir}/${sample}_F1.bam &&
+# 	samtools index ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam &&
+# 	echo -e "making bigwig files for seperated reads for ${sample}\n" &&
+# 	bamCoverage \
+# 		-b ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam \
+# 		-o ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bw \
+# 		--normalizeUsing CPM 
 	
-	bamCoverage \
-		-b ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam \
-		-o ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bw \
-		--normalizeUsing CPM \
-;done
+# 	bamCoverage \
+# 		-b ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam \
+# 		-o ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bw \
+# 		--normalizeUsing CPM \
+# ;done
 
 ###PEAK CALLING: done seperatly for minus and plus strand originating read pairs. Narrow peaks are called with a p-value of 5e-2. The effective genome size is set to 2.5e7 bp for T.brucei.
 
@@ -85,21 +85,21 @@ for sample in "${input_list[@]}"; do
 
 for sample in "${input_list_macs[@]}"; do
 	echo -e "peak calling for ${sample}\n" &&
-	macs2 callpeak  \
-		--bdg  \
-		-t ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam   \
-		-c ${alined_reads_dir}/${control_macs}_F2R1_${bam_file_prefix}.bam  \
-		-f BAMPE \
-		-n ${sample}_Minus_bowtie2_trimmed_uniq_dupsre_narrow   \
-		--outdir ${output_dir}/peak_calling/ \
-		-s 130 \
-		-p 5e-2 \
-		-m 10 30 \
-		--gsize 2.5e7 &&
+	# macs2 callpeak  \
+	# 	--bdg  \
+	# 	-t ${alined_reads_dir}/${sample}_F2R1_${bam_file_prefix}.bam   \
+	# 	-c ${alined_reads_dir}/${control_macs}_F2R1_${bam_file_prefix}.bam  \
+	# 	-f BAMPE \
+	# 	-n ${sample}_Minus_bowtie2_trimmed_uniq_dupsre_narrow   \
+	# 	--outdir ${output_dir}/peak_calling/ \
+	# 	-s 130 \
+	# 	-p 5e-2 \
+	# 	-m 10 30 \
+	# 	--gsize 2.5e7 &&
 	macs2 callpeak  \
 		--bdg  \
 		-t ${alined_reads_dir}/${sample}_F1R2_${bam_file_prefix}.bam  \
-		-c ${alined_reads_dir}/${control_macs}  \
+		-c ${alined_reads_dir}/${control_macs}_F1R2_${bam_file_prefix}.bam  \
 		-f BAMPE \
 		-n ${sample}_Plus_bowtie2_trimmed_uniq_dupsre_narrow  \
 		--outdir ${output_dir}/peak_calling/ \
